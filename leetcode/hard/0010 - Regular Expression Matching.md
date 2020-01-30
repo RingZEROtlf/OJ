@@ -71,15 +71,18 @@
 class Solution {
 public:
   bool isMatch(string s, string p) {
-    int m = s.length(), n = p.length();
-    if (n == 0) {
-      return m == 0;
+    return _isMatch(s, p, s.length(), p.length(), 0, 0);
+  }
+  
+  bool _isMatch(string &s, string &p, int sl, int pl, int si, int pi) {
+    if (pi == pl) {
+      return si == sl;
     }
-    bool first_match = (m != 0 && (s[0] == p[0] || p[0] == '.'));
-    if (n >= 2 && p[1] == '*') {
-      return isMatch(s, p.substr(2)) || (first_match && isMatch(s.substr(1), p));
+    bool firstMatch = (si != sl && (s[si] == p[pi] || p[pi] == '.'));
+    if (pl - pi >= 2 && p[pi + 1] == '*') {
+      return _isMatch(s, p, sl, pl, si, pi + 2) || (firstMatch && _isMatch(s, p, sl, pl, si + 1, pi));
     } else {
-      return first_match && isMatch(s.substr(1), p.substr(1));
+      return firstMatch && _isMatch(s, p, sl, pl, si + 1, pi + 1);
     }
   }
 };
